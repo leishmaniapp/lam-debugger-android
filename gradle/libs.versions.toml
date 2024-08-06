@@ -1,0 +1,116 @@
+[versions]
+
+# Android/Kotlin Core
+agp = "8.4.2"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.21"
+core-ktx = "1.13.1"
+dagger-hilt = "2.51.1"
+kotlinx-coroutines = "1.8.1"
+
+# Leishmaniapp
+# Gradle might complain about greater version available but that might not be what you're looking for
+# check the latest GitHub release in the repository (https://github.com/leishmaniapp/analysis-jvm)
+#noinspection GradleDependency
+leishmaniapp-analysis = "0.1.0-beta"
+
+# AndroidX
+androidx-hilt = "1.2.0"
+androidx-lifecycle = "2.8.4"
+androidx-compose = "2024.06.00"
+androidx-activity-compose = "1.9.1"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
+
+[libraries]
+
+# Androidx core and appcompat
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+
+# Kotlin Extensions
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
+
+# Kotlinx
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+
+# Dagger/Jetpack Hilt
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
+dagger-hilt-ksp = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger-hilt" }
+androidx-hilt-ksp = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt" }
+
+# Leishmaniapp LAM
+leishmaniapp-analysis-core = { group = "com.github.leishmaniapp.analysis-jvm", name = "core", version.ref = "leishmaniapp-analysis" }
+leishmaniapp-analysis-android = { group = "com.github.leishmaniapp.analysis-jvm", name = "android", version.ref = "leishmaniapp-analysis" }
+
+# Jetpack Lifecycle
+androidx-lifecycle-ksp = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "androidx-lifecycle" }
+
+# Jetpack Compose
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+androidx-compose-material = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+[bundles]
+
+ksp = [
+    "dagger-hilt-ksp",
+    "androidx-hilt-ksp",
+    "androidx-lifecycle-ksp",
+]
+
+kotlinx = [
+    "kotlinx-coroutines",
+]
+
+leishmaniapp = [
+    "leishmaniapp-analysis-core",
+    "leishmaniapp-analysis-android",
+]
+
+androidx-core = [
+    "androidx-core-ktx",
+]
+
+androidx-hilt = [
+    "dagger-hilt",
+]
+
+androidx-lifecycle = [
+    "androidx-lifecycle-runtime",
+    "androidx-lifecycle-runtime-ktx",
+    "androidx-lifecycle-viewmodel-ktx",
+    "androidx-lifecycle-viewmodel-compose",
+    "androidx-lifecycle-viewmodel-savedstate",
+    "androidx-lifecycle-service",
+]
+
+androidx-compose = [
+    "androidx-activity-compose",
+    "androidx-compose-livedata",
+    "androidx-compose-material",
+    "androidx-compose-material-icons",
+    "androidx-compose-ui",
+    "androidx-compose-ui-graphics",
+    "androidx-compose-ui-tooling-preview",
+]
+
+androidx-compose-debug = [
+    "androidx-compose-ui-tooling",
+]

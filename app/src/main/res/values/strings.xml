@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Leishmaniapp LAM Debugger</string>
+    <string name="app_description">Leishmaniapp Local Analysis Model (LAM) debugger</string>
+
+    <string name="action_ok">OK</string>
+
+    <string name="loading_title">Operation in progress</string>
+    <string name="loading_content">Wait until the current operation is completed</string>
+    <string name="loading_lam">Binding with the LAM module…</string>
+
+    <string name="error_title">An error has occurred</string>
+
+    <string name="notbound_service_title">Bind to a LAM module</string>
+    <string name="bound_service_title">Connected to a LAM module</string>
+</resources>
