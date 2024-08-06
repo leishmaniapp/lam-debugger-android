@@ -5,7 +5,6 @@ import com.leishmaniapp.analysis.lam.debugger.infrastructure.lam.LamConnectionSe
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

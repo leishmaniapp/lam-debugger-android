@@ -7,13 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.theme.ApplicationTheme
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.LoadingView
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.MainView
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -37,6 +35,9 @@ class MainActivity : ComponentActivity() {
                         state = state!!,
                         onErrorDismiss = {
                             mainViewModel.dismissState()
+                        },
+                        onBind = { pn ->
+                            mainViewModel.bindService(pn)
                         }
                     )
                 }

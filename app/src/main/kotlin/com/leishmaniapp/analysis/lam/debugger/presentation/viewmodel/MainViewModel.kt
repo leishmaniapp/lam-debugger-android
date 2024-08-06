@@ -1,8 +1,7 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel
 
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -12,9 +11,14 @@ import com.leishmaniapp.analysis.lam.debugger.domain.services.ILamConnectionServ
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state.MainState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * Handle the application main state
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
 
@@ -28,6 +32,13 @@ class MainViewModel @Inject constructor(
     private val lamConnectionService: ILamConnectionService,
 
     ) : ViewModel() {
+
+    companion object {
+        /**
+         * TAG for using with [Log]
+         */
+        val TAG: String = MainViewModel::class.simpleName!!
+    }
 
     /**
      * Application state backing field
@@ -46,5 +57,30 @@ class MainViewModel @Inject constructor(
     fun dismissState() =
         viewModelScope.launch {
             _state.value = MainState.NotBound
+        }
+
+    /**
+     * Bind a LAM module service from a different process
+     */
+    fun bindService(packageName: String) =
+        viewModelScope.launch {
+            // Set the state to busy
+            _state.value = MainState.BusyBound
+
+            // Bind the service
+            withContext(Dispatchers.Default) {
+                lamConnectionService.tryBind(context, packageName)
+            }.fold(
+                onSuccess = {
+                    // Service is now bounded
+                    Log.i(TAG, "Successfully bound ($packageName)")
+                    _state.value = MainState.Bound(packageName)
+                },
+                onFailure = { err ->
+                    // Failed to bound the service
+                    Log.e(TAG, "Failed to bind a service ($packageName)", err)
+                    _state.value = MainState.Error(err)
+                }
+            )
         }
 }

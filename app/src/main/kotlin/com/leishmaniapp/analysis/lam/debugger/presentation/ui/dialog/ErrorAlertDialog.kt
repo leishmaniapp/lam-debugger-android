@@ -13,7 +13,7 @@ import com.leishmaniapp.analysis.lam.R
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.theme.ApplicationTheme
 
 @Composable
-fun ExceptionAlertDialog(exception: Exception, onDismiss: () -> Unit) {
+fun ErrorAlertDialog(throwable: Throwable, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -22,7 +22,7 @@ fun ExceptionAlertDialog(exception: Exception, onDismiss: () -> Unit) {
             }
         },
         title = { Text(text = stringResource(id = R.string.error_title)) },
-        text = { Text(text = exception.toString()) },
+        text = { Text(text = throwable.toString()) },
         icon = {
             Icon(
                 imageVector = Icons.Rounded.Error,
@@ -34,10 +34,10 @@ fun ExceptionAlertDialog(exception: Exception, onDismiss: () -> Unit) {
 
 @Composable
 @Preview
-fun ExceptionAlertDialogPreview() {
+fun ErrorAlertDialogPreview() {
     ApplicationTheme {
-        ExceptionAlertDialog(
-            exception = Exception("Lorem ipsum dolor sit amet Exception")
+        ErrorAlertDialog(
+            throwable = Exception("Lorem ipsum dolor sit amet Exception")
         ) {
         }
     }

@@ -1,11 +1,14 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state
 
+import android.os.Parcelable
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.MainViewModel
+import kotlinx.parcelize.Parcelize
 
 /**
  * Represents the state of the [MainViewModel]
  */
-sealed class MainState {
+@Parcelize
+sealed class MainState : Parcelable {
 
     /**
      * No LAM module has been bounded
@@ -25,5 +28,5 @@ sealed class MainState {
     /**
      * An error message must be shown
      */
-    data class Error(val e: Exception) : MainState()
+    data class Error(val e: Throwable) : MainState()
 }
