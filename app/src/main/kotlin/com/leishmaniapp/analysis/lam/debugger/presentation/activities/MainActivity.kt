@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.theme.ApplicationTheme
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.LoadingView
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.MainView
@@ -19,8 +20,9 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        installSplashScreen()
         enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
 
         setContent {
             // Observe the application state
@@ -36,8 +38,8 @@ class MainActivity : ComponentActivity() {
                         onErrorDismiss = {
                             mainViewModel.dismissState()
                         },
-                        onBind = { pn ->
-                            mainViewModel.bindService(pn)
+                        onBind = { m ->
+                            mainViewModel.bindService(m)
                         }
                     )
                 }

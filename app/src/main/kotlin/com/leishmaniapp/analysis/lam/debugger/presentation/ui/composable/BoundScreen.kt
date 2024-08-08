@@ -19,7 +19,7 @@ fun BoundScreen() {
     Scaffold(
         topBar = {
             TopAppBar(title = {
-                Text(text = stringResource(id = R.string.not_bound_service_title))
+                Text(text = stringResource(id = R.string.not_bound_model_placeholder))
             })
         }
     ) { paddingValues ->

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LeishmaniappLAMDebugger"
+rootProject.name = "Leishmaniapp LAM Debugger"
 include(":app")
  

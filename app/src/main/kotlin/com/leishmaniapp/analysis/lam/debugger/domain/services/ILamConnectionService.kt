@@ -10,7 +10,7 @@ interface ILamConnectionService {
     /**
      * Attempt to bind to a LAM service in another process
      */
-    fun tryBind(context: Context, applicationPackage: String): Result<Unit>
+    fun tryBind(context: Context, model: String): Result<Unit>
 
     /**
      * Attempt to unbind the currently bound LAM service

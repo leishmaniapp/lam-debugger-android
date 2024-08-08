@@ -16,12 +16,12 @@ import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state.MainS
 fun MainView(
     state: MainState,
     onErrorDismiss: () -> Unit,
-    onBind: (packageName: String) -> Unit,
+    onBind: (model: String) -> Unit,
 ) {
     Box {
         when (state) {
-            MainState.NotBound -> NotBoundScreen { pn ->
-                onBind.invoke(pn)
+            MainState.NotBound -> NotBoundScreen { model ->
+                onBind.invoke(model)
             }
 
             is MainState.Bound -> BoundScreen()

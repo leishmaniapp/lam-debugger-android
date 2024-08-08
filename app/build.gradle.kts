@@ -77,6 +77,9 @@ dependencies {
     /* Kotlinx */
     implementation(libs.bundles.kotlinx)
 
+    /* Material */
+    implementation(libs.material)
+
     /* Leishmaniapp */
     implementation(libs.bundles.leishmaniapp)
 

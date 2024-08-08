@@ -7,6 +7,7 @@ ksp = "2.0.0-1.0.21"
 core-ktx = "1.13.1"
 dagger-hilt = "2.51.1"
 kotlinx-coroutines = "1.8.1"
+material = "1.12.0"
 
 # Leishmaniapp
 # Gradle might complain about greater version available but that might not be what you're looking for
@@ -19,6 +20,7 @@ androidx-hilt = "1.2.0"
 androidx-lifecycle = "2.8.4"
 androidx-compose = "2024.06.00"
 androidx-activity-compose = "1.9.1"
+androidx-core-splashscreen = "1.0.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -32,6 +34,10 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hil
 
 # Androidx core and appcompat
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-core-splashscreen" }
+
+# Material
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # Kotlin Extensions
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
@@ -87,6 +93,7 @@ leishmaniapp = [
 
 androidx-core = [
     "androidx-core-ktx",
+    "androidx-core-splashscreen",
 ]
 
 androidx-hilt = [

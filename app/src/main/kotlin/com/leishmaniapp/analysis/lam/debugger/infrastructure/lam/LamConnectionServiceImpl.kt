@@ -22,6 +22,16 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
          * TAG for using with [Log]
          */
         val TAG = LamConnectionServiceImpl::class.simpleName!!
+
+        /**
+         * Intent action to grab the service
+         */
+        const val LAM_SERVICE_ACTION = "com.leishmaniapp.lam.ACTION_ANALYZE"
+
+        /**
+         * Base name for the LAM modules installed in device
+         */
+        const val BASE_LAM_PACKAGE = "com.leishmaniapp.lam."
     }
 
     /**
@@ -42,7 +52,7 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
      */
     private var currentServiceConnection: CustomServiceConnection? = null
 
-    override fun tryBind(context: Context, applicationPackage: String): Result<Unit> =
+    override fun tryBind(context: Context, model: String): Result<Unit> =
         try {
             // Check if another service was already bound
             if (currentServiceConnection != null) {
@@ -50,30 +60,25 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
             }
 
             // Create the service intent
-            Intent().apply {
-                setComponent(
-                    ComponentName(
-                        applicationPackage,
-                        "com.leishmaniapp.analysis.service.IPCAnalysisService"
-                    )
-                )
-            }.let { intent ->
-                // Bind to the service
-                if (!context.bindService(
-                        intent,
-                        CustomServiceConnection().also {
-                            currentServiceConnection = it
-                        },
-                        Context.BIND_AUTO_CREATE
-                    )
-                ) {
-                    // Failed to bind service, does not exist
-                    throw InvalidLamPackageException(applicationPackage)
-                }
-
-                // Exit with no errors
-                Result.success(Unit)
+            val intent = Intent(LAM_SERVICE_ACTION).apply {
+                setPackage(BASE_LAM_PACKAGE + model)
             }
+
+            // Bind to the service
+            if (!context.bindService(
+                    intent,
+                    CustomServiceConnection().also {
+                        currentServiceConnection = it
+                    },
+                    Context.BIND_AUTO_CREATE
+                )
+            ) {
+                // Failed to bind service, does not exist
+                throw InvalidLamPackageException(BASE_LAM_PACKAGE + model)
+            }
+
+            // Exit with no errors
+            Result.success(Unit)
         } catch (e: Exception) {
             // Catch the exception and return it
             currentServiceConnection = null

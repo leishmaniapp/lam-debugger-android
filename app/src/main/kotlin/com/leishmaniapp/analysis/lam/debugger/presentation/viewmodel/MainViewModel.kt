@@ -62,23 +62,23 @@ class MainViewModel @Inject constructor(
     /**
      * Bind a LAM module service from a different process
      */
-    fun bindService(packageName: String) =
+    fun bindService(model: String) =
         viewModelScope.launch {
             // Set the state to busy
             _state.value = MainState.BusyBound
 
             // Bind the service
             withContext(Dispatchers.Default) {
-                lamConnectionService.tryBind(context, packageName)
+                lamConnectionService.tryBind(context, model)
             }.fold(
                 onSuccess = {
                     // Service is now bounded
-                    Log.i(TAG, "Successfully bound ($packageName)")
-                    _state.value = MainState.Bound(packageName)
+                    Log.i(TAG, "Successfully bound service for ($model)")
+                    _state.value = MainState.Bound(model)
                 },
                 onFailure = { err ->
                     // Failed to bound the service
-                    Log.e(TAG, "Failed to bind a service ($packageName)", err)
+                    Log.e(TAG, "Failed to bind a service for model ($model)", err)
                     _state.value = MainState.Error(err)
                 }
             )
