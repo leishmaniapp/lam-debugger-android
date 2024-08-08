@@ -18,7 +18,7 @@ sealed class MainState : Parcelable {
     /**
      * A LAM module is bounded
      */
-    data class Bound(val model: String) : MainState()
+    data object Bound : MainState()
 
     /**
      * LAM module bound/unbound in progress

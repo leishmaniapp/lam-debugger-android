@@ -1,11 +1,14 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.ui.view
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.leishmaniapp.analysis.lam.R
-import com.leishmaniapp.analysis.lam.debugger.presentation.ui.composable.BoundScreen
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.composable.NotBoundScreen
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.dialog.ErrorAlertDialog
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.dialog.LoadingAlertDialog
@@ -18,15 +21,18 @@ fun MainView(
     onErrorDismiss: () -> Unit,
     onBind: (model: String) -> Unit,
 ) {
-    Box {
+    Surface(modifier = Modifier.fillMaxSize()) {
         when (state) {
             MainState.NotBound -> NotBoundScreen { model ->
                 onBind.invoke(model)
             }
 
-            is MainState.Bound -> BoundScreen()
+            is MainState.Bound, MainState.BusyBound -> LoadingAlertDialog(
+                content = stringResource(
+                    id = R.string.loading_lam
+                )
+            )
 
-            MainState.BusyBound -> LoadingAlertDialog(content = stringResource(id = R.string.loading_lam))
             is MainState.Error -> ErrorAlertDialog(
                 throwable = state.e,
                 onDismiss = onErrorDismiss
@@ -52,7 +58,7 @@ private fun MainViewPreview_NotBound() {
 private fun MainViewPreview_Bound() {
     ApplicationTheme {
         MainView(
-            state = MainState.Bound("com.example"),
+            state = MainState.Bound,
             onErrorDismiss = {},
             onBind = {},
         )

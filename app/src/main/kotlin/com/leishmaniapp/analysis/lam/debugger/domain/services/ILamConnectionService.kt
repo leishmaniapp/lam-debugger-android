@@ -1,9 +1,10 @@
 package com.leishmaniapp.analysis.lam.debugger.domain.services
 
 import android.content.Context
+import android.os.Message
 
 /**
- * Service for connecting to LAM modules
+ * Service for connecting to a single LAM module
  */
 interface ILamConnectionService {
 
@@ -16,4 +17,9 @@ interface ILamConnectionService {
      * Attempt to unbind the currently bound LAM service
      */
     fun tryUnbind(context: Context): Result<Unit>
+
+    /**
+     * Send a message to the LAM
+     */
+    fun trySend(message: Message): Result<Unit>
 }

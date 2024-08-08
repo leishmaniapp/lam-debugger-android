@@ -1,6 +1,7 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,8 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
 
-    @ApplicationContext
-    private val context: Context,
     private val savedStateHandle: SavedStateHandle,
 
     /**
@@ -62,7 +61,7 @@ class MainViewModel @Inject constructor(
     /**
      * Bind a LAM module service from a different process
      */
-    fun bindService(model: String) =
+    fun bindService(model: String, context: Context) =
         viewModelScope.launch {
             // Set the state to busy
             _state.value = MainState.BusyBound
@@ -74,7 +73,7 @@ class MainViewModel @Inject constructor(
                 onSuccess = {
                     // Service is now bounded
                     Log.i(TAG, "Successfully bound service for ($model)")
-                    _state.value = MainState.Bound(model)
+                    _state.value = MainState.Bound
                 },
                 onFailure = { err ->
                     // Failed to bound the service
@@ -83,4 +82,28 @@ class MainViewModel @Inject constructor(
                 }
             )
         }
+
+    /**
+     * Unbind the currently bound service
+     */
+    fun unbindService(context: Context) = viewModelScope.launch {
+        // Set the state to busy
+        _state.value = MainState.BusyBound
+
+        // Unbind the service
+        withContext(Dispatchers.Default) {
+            lamConnectionService.tryUnbind(context)
+        }.fold(
+            onSuccess = {
+                // Service is now bounded
+                Log.i(TAG, "Successfully unbounded service")
+                _state.value = MainState.NotBound
+            },
+            onFailure = { err ->
+                // Failed to bound the service
+                Log.e(TAG, "Failed to unbind the service", err)
+                _state.value = MainState.Error(err)
+            }
+        )
+    }
 }

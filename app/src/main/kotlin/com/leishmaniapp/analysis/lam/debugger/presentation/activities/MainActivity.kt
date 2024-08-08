@@ -7,17 +7,22 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.theme.ApplicationTheme
+import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.AnalysisView
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.LoadingView
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.view.MainView
+import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.AnalysisViewModel
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.MainViewModel
+import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state.MainState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
+    private val analysisViewModel: AnalysisViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -26,23 +31,41 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             // Observe the application state
-            val state by mainViewModel.state.observeAsState()
+            val mainState by mainViewModel.state.observeAsState()
+            val analysisState by analysisViewModel.state.observeAsState()
+
+            // Get the context
+            val context = LocalContext.current
 
             // Show loading or the main view
             ApplicationTheme {
-                if (state == null) {
+                // Check for nullity on state
+                if (mainState == null || analysisState == null) {
                     LoadingView()
+                    return@ApplicationTheme
+                }
+
+                // Check the required screen
+                if (mainState == MainState.Bound) {
+                    AnalysisView(
+                        state = analysisState!!,
+                        onErrorDismiss = { /*TODO*/ },
+                        onUnbind = { /*TODO*/ }) {
+
+                    }
+
                 } else {
                     MainView(
-                        state = state!!,
+                        state = mainState!!,
                         onErrorDismiss = {
                             mainViewModel.dismissState()
                         },
                         onBind = { m ->
-                            mainViewModel.bindService(m)
-                        }
+                            mainViewModel.bindService(m, context)
+                        },
                     )
                 }
+
             }
         }
     }

@@ -20,13 +20,13 @@ fun ApplicationTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> LeishmaniappDarkColorScheme
+        else -> LeishmaniappLightColorScheme
     }
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = LeishmaniappTypography,
         content = content
     )
 }

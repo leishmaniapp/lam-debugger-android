@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.os.Message
+import android.os.Messenger
 import android.util.Log
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.InvalidLamPackageException
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.LamAlreadyBoundException
@@ -35,22 +37,29 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
     }
 
     /**
+     * Service connection for the current LAM service
+     */
+    private var currentServiceConnection: CustomServiceConnection? = null
+
+    /**
+     * Application messenger
+     */
+    private var messenger: Messenger? = null
+
+    /**
      * Handle LAM service connections
      */
     inner class CustomServiceConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.i(TAG, "Connected to LAM service: $name")
+            messenger = Messenger(service)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             Log.i(TAG, "Disconnected from LAM service: $name")
+            currentServiceConnection = null
         }
     }
-
-    /**
-     * Service connection for the current LAM service
-     */
-    private var currentServiceConnection: CustomServiceConnection? = null
 
     override fun tryBind(context: Context, model: String): Result<Unit> =
         try {
@@ -97,6 +106,19 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
 
             // Delete the service connection and return success
             currentServiceConnection = null
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+
+    override fun trySend(message: Message): Result<Unit> =
+        try {
+            if (messenger == null) {
+                throw LamUnboundException()
+            }
+
+            messenger!!.send(message)
             Result.success(Unit)
 
         } catch (e: Exception) {

@@ -19,7 +19,7 @@ leishmaniapp-analysis = "0.1.0-beta"
 androidx-hilt = "1.2.0"
 androidx-lifecycle = "2.8.4"
 androidx-compose = "2024.06.00"
-androidx-activity-compose = "1.9.1"
+androidx-activity = "1.9.1"
 androidx-core-splashscreen = "1.0.1"
 
 [plugins]
@@ -65,7 +65,9 @@ androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-s
 
 # Jetpack Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "androidx-activity" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 androidx-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 androidx-compose-material = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -110,6 +112,8 @@ androidx-lifecycle = [
 ]
 
 androidx-compose = [
+    "androidx-activity",
+    "androidx-activity-ktx",
     "androidx-activity-compose",
     "androidx-compose-livedata",
     "androidx-compose-material",
