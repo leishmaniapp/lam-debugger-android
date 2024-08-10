@@ -16,8 +16,10 @@ import com.leishmaniapp.analysis.lam.debugger.domain.exception.InvalidLamPackage
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.LamAlreadyBoundException
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.LamUnboundException
 import com.leishmaniapp.analysis.lam.debugger.domain.services.ILamConnectionService
-import com.leishmaniapp.analysis.lam.service.LamAnalysisRequest
-import com.leishmaniapp.analysis.lam.service.LamAnalysisResponse
+import com.leishmaniapp.analysis.lam.LamAnalysisRequest
+import com.leishmaniapp.analysis.lam.LamAnalysisResponse
+import com.leishmaniapp.analysis.lam.fromBundle
+import com.leishmaniapp.analysis.lam.toBundle
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -78,19 +80,8 @@ class LamConnectionServiceImpl @Inject constructor(
 
         // Get the reply data
         Log.i(TAG, "New reply data arrived")
-        val response: LamAnalysisResponse? = msg.data.run {
-
-            // Set the class loader for the bundle
-            classLoader = this@LamConnectionServiceImpl.context.classLoader
-
-            // Get the parcel
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                getParcelable("LAM_BUNDLE", LamAnalysisResponse::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                getParcelable("LAM_BUNDLE")
-            }
-        }
+        val response: LamAnalysisResponse? =
+            LamAnalysisResponse.fromBundle(msg.data, context.classLoader)
 
         runBlocking {
             replyChannel.send(response!!)
@@ -199,7 +190,7 @@ class LamConnectionServiceImpl @Inject constructor(
             )
 
             val message = Message().apply {
-                data = bundleOf("LAM_BUNDLE" to request)
+                data = request.toBundle()
                 replyTo = replyMessenger
             }
 

@@ -18,8 +18,8 @@ import androidx.lifecycle.viewModelScope
 import com.leishmaniapp.analysis.core.AnalysisResultsParcel
 import com.leishmaniapp.analysis.lam.debugger.domain.services.ILamConnectionService
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state.AnalysisState
-import com.leishmaniapp.analysis.lam.service.LamAnalysisRequest
-import com.leishmaniapp.analysis.lam.service.LamAnalysisResponse
+import com.leishmaniapp.analysis.lam.LamAnalysisRequest
+import com.leishmaniapp.analysis.lam.LamAnalysisResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.consumeAsFlow

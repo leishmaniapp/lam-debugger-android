@@ -1,9 +1,8 @@
 package com.leishmaniapp.analysis.lam.debugger.domain.services
 
 import android.content.Context
-import android.os.Message
-import com.leishmaniapp.analysis.lam.service.LamAnalysisRequest
-import com.leishmaniapp.analysis.lam.service.LamAnalysisResponse
+import com.leishmaniapp.analysis.lam.LamAnalysisRequest
+import com.leishmaniapp.analysis.lam.LamAnalysisResponse
 import kotlinx.coroutines.channels.Channel
 
 /**
