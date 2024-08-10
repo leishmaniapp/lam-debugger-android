@@ -7,4 +7,6 @@ import kotlinx.parcelize.Parcelize
 sealed class AnalysisState : Parcelable {
     data object None : AnalysisState()
     data class Error(val e: Throwable) : AnalysisState()
+    data object AwaitData : AnalysisState()
+    data object HasData : AnalysisState()
 }

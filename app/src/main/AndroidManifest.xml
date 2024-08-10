@@ -10,6 +10,8 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
+    <uses-permission android:name="com.leishmaniapp.lam.BIND_PERMISSION" />
+
     <application
         android:name=".debugger.infrastructure.android.MainApplication"
         android:description="@string/app_description"
@@ -27,6 +29,18 @@
             </intent-filter>
 
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.leishmaniapp.analysis.lam.debugger.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

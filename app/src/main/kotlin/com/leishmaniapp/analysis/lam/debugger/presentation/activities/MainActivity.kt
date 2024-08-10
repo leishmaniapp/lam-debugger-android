@@ -47,12 +47,18 @@ class MainActivity : ComponentActivity() {
 
                 // Check the required screen
                 if (mainState == MainState.Bound) {
+
+                    val analysisData by analysisViewModel.results.observeAsState()
+
                     AnalysisView(
                         state = analysisState!!,
-                        onErrorDismiss = { /*TODO*/ },
-                        onUnbind = { /*TODO*/ }) {
-
-                    }
+                        onDismiss = { analysisViewModel.dismissState() },
+                        onUnbind = { mainViewModel.unbindService(context) },
+                        onAnalyze = { uri, diagnosis, sample ->
+                            analysisViewModel.analyze(context, uri, diagnosis, sample)
+                        },
+                        data = analysisData ?: listOf()
+                    )
 
                 } else {
                     MainView(

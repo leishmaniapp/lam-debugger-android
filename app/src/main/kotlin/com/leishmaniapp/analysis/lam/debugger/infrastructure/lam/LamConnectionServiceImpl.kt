@@ -4,20 +4,38 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import android.util.Log
+import androidx.core.os.bundleOf
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.InvalidLamPackageException
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.LamAlreadyBoundException
 import com.leishmaniapp.analysis.lam.debugger.domain.exception.LamUnboundException
 import com.leishmaniapp.analysis.lam.debugger.domain.services.ILamConnectionService
+import com.leishmaniapp.analysis.lam.service.LamAnalysisRequest
+import com.leishmaniapp.analysis.lam.service.LamAnalysisResponse
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 /**
  * Bound to a local LAM service
  */
-class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
+class LamConnectionServiceImpl @Inject constructor(
+
+    @ApplicationContext
+    private val context: Context,
+
+    ) : ILamConnectionService {
 
     companion object {
         /**
@@ -42,9 +60,47 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
     private var currentServiceConnection: CustomServiceConnection? = null
 
     /**
+     * bound service package name
+     */
+    private var connectionPackage: String? = null
+
+    /**
      * Application messenger
      */
-    private var messenger: Messenger? = null
+    private var sendMessenger: Messenger? = null
+
+    /**
+     * Where the
+     */
+    override val replyChannel: Channel<LamAnalysisResponse> = Channel()
+
+    private val replyHandler = Handler(Looper.getMainLooper()) { msg ->
+
+        // Get the reply data
+        Log.i(TAG, "New reply data arrived")
+        val response: LamAnalysisResponse? = msg.data.run {
+
+            // Set the class loader for the bundle
+            classLoader = this@LamConnectionServiceImpl.context.classLoader
+
+            // Get the parcel
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                getParcelable("LAM_BUNDLE", LamAnalysisResponse::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                getParcelable("LAM_BUNDLE")
+            }
+        }
+
+        runBlocking {
+            replyChannel.send(response!!)
+        }
+
+        // Handler expects more messages
+        true
+    }
+
+    private val replyMessenger: Messenger = Messenger(replyHandler)
 
     /**
      * Handle LAM service connections
@@ -52,12 +108,19 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
     inner class CustomServiceConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.i(TAG, "Connected to LAM service: $name")
-            messenger = Messenger(service)
+
+            // Set the package name and messenger
+            sendMessenger = Messenger(service)
+            connectionPackage = name!!.packageName
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             Log.i(TAG, "Disconnected from LAM service: $name")
+
+            // Set variables to null
             currentServiceConnection = null
+            connectionPackage = null
+            sendMessenger = null
         }
     }
 
@@ -71,6 +134,7 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
             // Create the service intent
             val intent = Intent(LAM_SERVICE_ACTION).apply {
                 setPackage(BASE_LAM_PACKAGE + model)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
             // Bind to the service
@@ -88,9 +152,15 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
 
             // Exit with no errors
             Result.success(Unit)
+
         } catch (e: Exception) {
-            // Catch the exception and return it
+
+            // Delete the service connection and return success
             currentServiceConnection = null
+            connectionPackage = null
+            sendMessenger = null
+
+            // Catch and return the exception
             Result.failure(e)
         }
 
@@ -106,19 +176,36 @@ class LamConnectionServiceImpl @Inject constructor() : ILamConnectionService {
 
             // Delete the service connection and return success
             currentServiceConnection = null
+            connectionPackage = null
+            sendMessenger = null
+
             Result.success(Unit)
 
         } catch (e: Exception) {
             Result.failure(e)
         }
 
-    override fun trySend(message: Message): Result<Unit> =
+    override fun trySend(request: LamAnalysisRequest): Result<Unit> =
         try {
-            if (messenger == null) {
+            if (sendMessenger == null || connectionPackage == null) {
                 throw LamUnboundException()
             }
 
-            messenger!!.send(message)
+            // Grant permission to the package
+            context.grantUriPermission(
+                connectionPackage,
+                request.uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+
+            val message = Message().apply {
+                data = bundleOf("LAM_BUNDLE" to request)
+                replyTo = replyMessenger
+            }
+
+            // Send the message
+            sendMessenger!!.send(message)
+
             Result.success(Unit)
 
         } catch (e: Exception) {

@@ -2,6 +2,9 @@ package com.leishmaniapp.analysis.lam.debugger.domain.services
 
 import android.content.Context
 import android.os.Message
+import com.leishmaniapp.analysis.lam.service.LamAnalysisRequest
+import com.leishmaniapp.analysis.lam.service.LamAnalysisResponse
+import kotlinx.coroutines.channels.Channel
 
 /**
  * Service for connecting to a single LAM module
@@ -21,5 +24,10 @@ interface ILamConnectionService {
     /**
      * Send a message to the LAM
      */
-    fun trySend(message: Message): Result<Unit>
+    fun trySend(request: LamAnalysisRequest): Result<Unit>
+
+    /**
+     * Channel from which responses are sent
+     */
+    val replyChannel: Channel<LamAnalysisResponse>
 }
