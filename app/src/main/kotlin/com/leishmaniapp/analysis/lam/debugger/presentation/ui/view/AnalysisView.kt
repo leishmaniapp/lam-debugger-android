@@ -30,6 +30,7 @@ import com.leishmaniapp.analysis.core.AnalysisStatus
 import com.leishmaniapp.analysis.core.CartesianCoordinatesParcel
 import com.leishmaniapp.analysis.lam.R
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.composable.AnalysisDataSelection
+import com.leishmaniapp.analysis.lam.debugger.presentation.ui.composable.AnalysisResultsSection
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.dialog.ErrorAlertDialog
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.dialog.LoadingAlertDialog
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.theme.ApplicationTheme
@@ -81,32 +82,10 @@ fun AnalysisView(
 
                     AnalysisState.AwaitData -> LoadingAlertDialog()
 
-                    AnalysisState.HasData -> Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-                    ) {
-
-                        Text(
-                            text = stringResource(id = R.string.bound_service_results),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-
-                        ElevatedButton(onClick = onDismiss) {
-                            Text(text = stringResource(id = R.string.action_new_request))
-                        }
-
-                        LazyColumn {
-                            items(data) { results ->
-                                Card {
-                                    Text(
-                                        modifier = Modifier.padding(16.dp),
-                                        text = results.toString()
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    AnalysisState.HasData -> AnalysisResultsSection(
+                        data = data,
+                        onDismiss = onDismiss
+                    )
                 }
             }
         }

@@ -27,4 +27,5 @@
     <string name="bound_service_image_title">Select an image</string>
     <string name="bound_service_metadata_title">Fill metadata</string>
     <string name="bound_service_results">Analysis model results</string>
+    <string name="bound_service_results_total">Found %1$s elements</string>
 </resources>
