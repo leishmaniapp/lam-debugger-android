@@ -1,7 +1,5 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.ui.view
 
-import android.net.Uri
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable

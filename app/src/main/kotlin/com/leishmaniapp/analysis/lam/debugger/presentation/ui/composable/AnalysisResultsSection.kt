@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leishmaniapp.analysis.core.AnalysisResultsParcel
 import com.leishmaniapp.analysis.core.AnalysisStatus
-import com.leishmaniapp.analysis.core.CartesianCoordinatesParcel
+import com.leishmaniapp.analysis.core.BoxCoordinatesParcel
 import com.leishmaniapp.analysis.lam.R
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.theme.ApplicationTheme
 
@@ -68,7 +68,7 @@ fun AnalysisResultsSection(
                                     text = analysisResultsParcel.status.toString()
                                 )
                                 Text(
-                                    text = "(${analysisResultsParcel.model})"
+                                    text = "(${analysisResultsParcel.model}@${analysisResultsParcel.version})"
                                 )
                             }
                         }
@@ -88,7 +88,7 @@ fun AnalysisResultsSection(
                                         Card(modifier = Modifier.padding(4.dp)) {
                                             Text(
                                                 modifier = Modifier.padding(4.dp),
-                                                text = (cords.x to cords.y).toString()
+                                                text = cords.toString()
                                             )
                                         }
                                     }
@@ -112,20 +112,22 @@ fun AnalysisResultsSectionPreview() {
                     AnalysisResultsParcel(
                         model = "lorem.ipsum",
                         status = AnalysisStatus.OK,
+                        version = "Example LAM",
                         results = mapOf(
                             "a" to listOf(
-                                CartesianCoordinatesParcel(10, 20),
-                                CartesianCoordinatesParcel(20, 30),
+                                BoxCoordinatesParcel(10, 20, 0, 0),
+                                BoxCoordinatesParcel(20, 30, 0, 0),
                             )
                         )
                     ),
                     AnalysisResultsParcel(
                         model = "lorem.ipsum",
                         status = AnalysisStatus.OK,
+                        version = "Example LAM",
                         results = mapOf(
                             "a" to listOf(
-                                CartesianCoordinatesParcel(10, 20),
-                                CartesianCoordinatesParcel(20, 30),
+                                BoxCoordinatesParcel(10, 20, 0, 0),
+                                BoxCoordinatesParcel(20, 30, 0, 0),
                             )
                         )
                     )

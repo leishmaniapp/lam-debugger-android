@@ -1,7 +1,6 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.leishmaniapp.analysis.lam.debugger.domain.services.ILamConnectionService
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state.MainState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

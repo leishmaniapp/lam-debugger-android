@@ -1,14 +1,9 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel
 
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.os.Message
 import android.util.Log
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
-import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -16,10 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.leishmaniapp.analysis.core.AnalysisResultsParcel
+import com.leishmaniapp.analysis.lam.LamAnalysisRequest
 import com.leishmaniapp.analysis.lam.debugger.domain.services.ILamConnectionService
 import com.leishmaniapp.analysis.lam.debugger.presentation.viewmodel.state.AnalysisState
-import com.leishmaniapp.analysis.lam.LamAnalysisRequest
-import com.leishmaniapp.analysis.lam.LamAnalysisResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -27,7 +21,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 import java.util.UUID
 import javax.inject.Inject
 

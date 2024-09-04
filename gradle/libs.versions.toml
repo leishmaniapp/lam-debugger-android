@@ -10,10 +10,7 @@ kotlinx-coroutines = "1.8.1"
 material = "1.12.0"
 
 # Leishmaniapp
-# Gradle might complain about greater version available but that might not be what you're looking for
-# check the latest GitHub release in the repository (https://github.com/leishmaniapp/analysis-jvm)
-#noinspection GradleDependency
-leishmaniapp-analysis = "1.0.0"
+leishmaniapp-analysis = "1.1.0"
 
 # AndroidX
 androidx-hilt = "1.2.0"

@@ -1,33 +1,25 @@
 package com.leishmaniapp.analysis.lam.debugger.presentation.ui.view
 
 import android.net.Uri
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PowerOff
-import androidx.compose.material3.Card
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.leishmaniapp.analysis.core.AnalysisResultsParcel
 import com.leishmaniapp.analysis.core.AnalysisStatus
-import com.leishmaniapp.analysis.core.CartesianCoordinatesParcel
+import com.leishmaniapp.analysis.core.BoxCoordinatesParcel
 import com.leishmaniapp.analysis.lam.R
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.composable.AnalysisDataSelection
 import com.leishmaniapp.analysis.lam.debugger.presentation.ui.composable.AnalysisResultsSection
@@ -119,10 +111,11 @@ private fun AnalysisViewPreview_HasData() {
                 AnalysisResultsParcel(
                     model = "lorem.ipsum",
                     status = AnalysisStatus.OK,
+                    version = "LAM",
                     results = mapOf(
                         "a" to listOf(
-                            CartesianCoordinatesParcel(10, 20),
-                            CartesianCoordinatesParcel(20, 30),
+                            BoxCoordinatesParcel(10, 20, 0, 0),
+                            BoxCoordinatesParcel(20, 30, 0, 0),
                         )
                     )
                 )
